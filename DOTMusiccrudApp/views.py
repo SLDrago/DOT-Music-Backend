@@ -67,7 +67,7 @@ def get_songs_by_artist(request, artist_id):
     try:
         # Fetch the artist name
         artist = Artist.objects.get(id=artist_id)
-        artist_name = artist.name  # Assuming the Artist model has a 'name' field
+        artist_name = artist.user.name  # Assuming the Artist model has a 'name' field
 
         # Fetch songs where artist matches the given artist_id
         songs = list(Songs.objects.filter(artist_id=artist_id).values())

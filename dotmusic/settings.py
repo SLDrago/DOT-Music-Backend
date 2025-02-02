@@ -161,10 +161,10 @@ SIMPLE_JWT = {
 }
 
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = '47e0b614e2ddcc'
-EMAIL_HOST_PASSWORD = 'f26c5bc1ac82f3'
-EMAIL_PORT = '2525'
+EMAIL_HOST = ''
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = ''
 
 # Define media settings
 MEDIA_URL = '/media/'
