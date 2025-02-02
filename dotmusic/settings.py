@@ -160,7 +160,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': False,  # Whether to blacklist old refresh tokens after rotation
 }
 
-
+# Enter your Email settings
 EMAIL_HOST = ''
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
