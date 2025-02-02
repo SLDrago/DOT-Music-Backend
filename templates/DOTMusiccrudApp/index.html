@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Artist and Album Details</title>
+</head>
+<body>
+    {% extends 'DOTMusiccrudApp/base.html' %}
+    {% block content %}
+    
+    <!-- Display Artist Details -->
+    <h1>Artist Details</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Bio</th>
+                <th>Profile Picture</th>
+                <th>Genre</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for artist in artists %}
+            <tr>
+                <td>{{ artist.name }}</td>
+                <td>{{ artist.bio }}</td>
+                <td>
+                    {% if artist.profile_picture %}
+                        <img src="{{ artist.profile_picture.url }}" alt="Profile Picture" width="100" height="100">
+                    {% else %}
+                        No Picture
+                    {% endif %}
+                </td>
+                <td>{{ artist.genre }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Display Album Details -->
+    <h1>Album Details</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Cover Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for album in albums %}
+            <tr>
+                <td>{{ album.title }}</td>
+                <td>{{ album.artist.name }}</td>
+                <td>{{ album.release_date }}</td>
+                <td>{{ album.genre }}</td>
+                <td>
+                    {% if album.cover_image %}
+                        <img src="{{ album.cover_image.url }}" alt="Cover Image" width="100" height="100">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Display Popular Radio Details -->
+    <h1>Popular Radio Details</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Cover Image</th>
+                <th>Rank</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pr in popular_radio %}
+            <tr>
+                <td>{{ pr.name }}</td>
+                <td>{{ pr.description }}</td>
+                <td>
+                    {% if pr.cover_image %}
+                        <img src="{{ pr.cover_image.url }}" alt="Cover Image" width="100" height="100">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>{{ pr.rank }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}
+</body>
+</html>
