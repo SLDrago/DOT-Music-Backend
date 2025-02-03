@@ -44,220 +44,301 @@ DOT-Music Backend is a Django-based system that provides APIs for managing users
    python manage.py runserver
    ```
 
-# DOT-Music Backend API Documentation
+# API Documentation
 
 This document provides an overview of the available API endpoints for the DOT-Music Backend.
 
-## Base URL
+## Base URL (Develop Env. Default)
 
 ```
-http://yourdomain.com/api/
+http://127.0.0.1:8000
 ```
 
-## Authentication & User Management
+## Artist Registration
 
-### Register a New User
+### Endpoint: `POST /api/artist/register/`
 
-**Endpoint:** `POST /api/users/register/`  
-**Description:** Registers a new user.  
-**Request Body (JSON):**
+**Description:** Registers a new artist user.
+
+**Request Body:**
 
 ```json
 {
-  "username": "example_user",
-  "email": "user@example.com",
+  "username": "artist_name",
+  "password": "securepassword",
+  "email": "artist@example.com",
+  "bio": "Short artist biography",
+  "artist_type": "pop"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Registration successful",
+  "artist": { ... },
+  "access_token": "jwt_access_token",
+  "refresh_token": "jwt_refresh_token"
+}
+```
+
+---
+
+## Artist Login
+
+### Endpoint: `POST /api/artist/login/`
+
+**Description:** Logs in an artist user and returns authentication tokens.
+
+**Request Body:**
+
+```json
+{
+  "email": "artist@example.com",
   "password": "securepassword"
 }
 ```
 
-**Response (Success):**
+**Response:**
 
 ```json
 {
-  "message": "User registered successfully",
-  "user_id": 1
+  "access_token": "jwt_access_token",
+  "refresh_token": "jwt_refresh_token",
+  "name": "artist_name",
+  "artistId": 1,
+  "artist": { ... }
 }
 ```
-
-### Login
-
-**Endpoint:** `POST /api/users/login/`  
-**Description:** Authenticates a user and returns a JWT token.  
-**Request Body (JSON):**
-
-```json
-{
-  "email": "user@example.com",
-  "password": "securepassword"
-}
-```
-
-**Response (Success):**
-
-```json
-{
-  "access": "jwt_access_token",
-  "refresh": "jwt_refresh_token"
-}
-```
-
-### Refresh Token
-
-**Endpoint:** `POST /api/users/token/refresh/`  
-**Description:** Refreshes the JWT access token.  
-**Request Body (JSON):**
-
-```json
-{
-  "refresh": "jwt_refresh_token"
-}
-```
-
-### Edit User Profile
-
-**Endpoint:** `PATCH /api/users/edit-user/`  
-**Description:** Updates user profile details.
-
-### Request Password Reset
-
-**Endpoint:** `POST /api/users/request-password-reset/`  
-**Description:** Sends a password reset link to the user's email.
-
-### Reset Password
-
-**Endpoint:** `POST /api/users/reset-password/`  
-**Description:** Allows users to reset their password.
-
-### Get User Profile
-
-**Endpoint:** `GET /api/users/user-profile/`  
-**Description:** Retrieves the logged-in user's profile details.
 
 ---
 
-## Artist Management
+## Fetch Artist Types
 
-### Artist Login
+### Endpoint: `GET /api/artist/types/`
 
-**Endpoint:** `POST /api/artist/login/`  
-**Description:** Authenticates an artist.
+**Description:** Retrieves the available artist types.
 
-### Get Artist Types
+**Response:**
 
-**Endpoint:** `GET /api/artist/types/`  
-**Description:** Retrieves available artist types.
-
-### Register an Artist
-
-**Endpoint:** `POST /api/artist/register/`  
-**Description:** Registers a new artist.
-
----
-
-## Music Data & Content
-
-### Get Recent Artists
-
-**Endpoint:** `GET /api/artists/`  
-**Description:** Retrieves the last five artists added.
-
-### Get Recent Albums
-
-**Endpoint:** `GET /api/albums/`  
-**Description:** Retrieves the last five albums added.
-
-### Get Popular Radio Stations
-
-**Endpoint:** `GET /api/popular-radio/`  
-**Description:** Retrieves the last five popular radio stations.
-
-### Get "Today in Music" Highlights
-
-**Endpoint:** `GET /api/today-in-music/`  
-**Description:** Retrieves the last five "Today in Music" highlights.
-
-### Get All Artists
-
-**Endpoint:** `GET /api/full-artists/`  
-**Description:** Retrieves all artists.
-
-### Get All Albums
-
-**Endpoint:** `GET /api/full-albums/`  
-**Description:** Retrieves all albums.
-
-### Get All Radio Stations
-
-**Endpoint:** `GET /api/full-radio/`  
-**Description:** Retrieves all radio stations.
-
-### Get Songs by Artist
-
-**Endpoint:** `GET /api/songs/artist/{artist_id}/`  
-**Description:** Retrieves songs associated with a specific artist.  
-**Path Parameter:**
-
-- `artist_id` (integer) - The ID of the artist.
+```json
+[
+  { "value": "pop", "label": "Pop" },
+  { "value": "rock", "label": "Rock" },
+  { "value": "hip_hop", "label": "Hip-Hop" },
+  ...
+]
+```
 
 ---
 
-## Song Management
+## Fetch Last Five Artists
 
-### Get All Songs
+### Endpoint: `GET /api/artists/last-five/`
 
-**Endpoint:** `GET /api/songs/`  
-**Description:** Retrieves a list of all songs.
+**Description:** Retrieves the last five registered artists.
 
-### Upload a New Song
+**Response:**
 
-**Endpoint:** `POST /api/songs/upload/`  
-**Description:** Uploads a new song.  
-**Request Body (JSON):**
+```json
+{
+  "artists": [
+    {
+      "id": 1,
+      "bio": "Short artist biography",
+      "genre": "pop",
+      "profile_picture": "path/to/profile.jpg",
+      "user__name": "Artist Name"
+    },
+    ...
+  ]
+}
+```
+
+---
+
+## Fetch Songs by Artist
+
+### Endpoint: `GET /api/songs/artist/{artist_id}/`
+
+**Description:** Retrieves songs by a specific artist.
+
+**Response:**
+
+```json
+{
+  "artist_name": "Artist Name",
+  "songs": [
+    { "id": 1, "title": "Song Title", "duration": "3:45" },
+    ...
+  ]
+}
+```
+
+---
+
+## Upload Song
+
+### Endpoint: `POST /api/songs/upload/`
+
+**Description:** Uploads a new song for the authenticated artist.
+
+**Request Body:**
 
 ```json
 {
   "title": "Song Title",
-  "artist": "Artist Name",
+  "genre": "pop",
+  "duration": "3:45",
   "file": "song.mp3"
 }
 ```
 
-### Update a Song
+**Response:**
 
-**Endpoint:** `PATCH /api/songs/{song_id}/update/`  
-**Description:** Updates a song's details.  
-**Path Parameter:**
-
-- `song_id` (integer) - The ID of the song to update.
-
-### Delete a Song
-
-**Endpoint:** `DELETE /api/songs/{song_id}/delete/`  
-**Description:** Deletes a specific song.  
-**Path Parameter:**
-
-- `song_id` (integer) - The ID of the song to delete.
-
----
-
-## Admin Panel
-
-### Django Admin Access
-
-**Endpoint:** `GET /admin/`  
-**Description:** Provides access to the Django Admin panel for managing content and users (requires admin privileges).
-
----
-
-## Media Files (Development Only)
-
-If `DEBUG=True`, media files are served at:
-
-```
-/media/
+```json
+{
+  "id": 1,
+  "title": "Song Title",
+  "genre": "pop",
+  "duration": "3:45",
+  "artist": "Artist Name"
+}
 ```
 
 ---
+
+## User Registration
+
+### Endpoint: `POST /api/user/register/`
+
+**Description:** Registers a new user.
+
+**Request Body:**
+
+```json
+{
+  "name": "User Name",
+  "email": "user@example.com",
+  "password": "securepassword"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "User registered successfully",
+  "user": {
+    "name": "User Name",
+    "email": "user@example.com",
+    "access_token": "jwt_access_token",
+    "refresh_token": "jwt_refresh_token"
+  }
+}
+```
+
+---
+
+## User Login
+
+### Endpoint: `POST /api/user/login/`
+
+**Description:** Logs in a user and returns authentication tokens.
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "securepassword"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Login successful",
+  "user": {
+    "email": "user@example.com",
+    "name": "User Name",
+    "access_token": "jwt_access_token",
+    "refresh_token": "jwt_refresh_token"
+  }
+}
+```
+
+---
+
+## Password Reset Request
+
+### Endpoint: `POST /api/user/request-password-reset/`
+
+**Description:** Requests a password reset by email.
+
+**Request Body:**
+
+```json
+{
+  "email": "user@example.com"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Password reset email sent successfully."
+}
+```
+
+---
+
+## Reset Password
+
+### Endpoint: `POST /api/user/reset-password/`
+
+**Description:** Resets the user's password.
+
+**Request Body:**
+
+```json
+{
+  "uid": "encoded_user_id",
+  "token": "reset_token",
+  "password": "new_secure_password"
+}
+```
+
+**Response:**
+
+```json
+{
+  "message": "Password reset successful."
+}
+```
+
+---
+
+## Fetch User Profile
+
+### Endpoint: `GET /api/user/profile/`
+
+**Description:** Retrieves the authenticated user's profile.
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "name": "User Name",
+  "email": "user@example.com",
+  "gender": "Male",
+  "birthday": "1995-06-15"
+}
+```
 
 ### Notes:
 
