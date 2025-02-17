@@ -349,3 +349,6 @@ http://127.0.0.1:8000
 ## Contributing
 
 Feel free to open issues and contribute to the project.
+
+--- 
+Made with ❤️ by [[Thanusian](https://github.com/Thanusiyan1007), [Lilaniya](https://github.com/LilaniRanjan), Rohana & [Oshada - Me](https://github.com/SLDrago/)]
